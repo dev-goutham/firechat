@@ -1,80 +1,46 @@
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
+
+// import "./app.css";
+import { useAuth } from "./store/Auth";
+import ChannelMain from "./sections/ChannelMain";
+import Login from "./sections/Login";
+import Members from "./sections/Members";
+import Nav from "./sections/Nav";
+import Loading from "./components/Loading";
+
+const RedirectToChannel: React.FC = () => {
+  return <Redirect to="/channel/general" />;
+};
 
 const App: React.FC = () => {
-  return (
+  const { data, loading } = useAuth();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return data ? (
     <div className="App">
-      <div className="Nav">
-        <div className="User">
-          <img
-            className="UserImage"
-            alt="whatever"
-            src="https://placekitten.com/64/64"
-          />
-          <div>
-            <div>Goutham Ram</div>
-            <div>
-              <button className="text-button">log out</button>
-            </div>
-          </div>
+      <Router>
+        <Nav />
+        <div className="Channel">
+          <Switch>
+            <Route exact path="/channel/:id" component={ChannelMain} />
+            <Route path="*" component={RedirectToChannel} />
+          </Switch>
+          {/* <ChannelMain /> */}
+          <Members />
         </div>
-        <nav className="ChannelNav">
-          <a href="/channel/awesome"># awesome</a>
-          <a className="active" href="/channel/general">
-            # general
-          </a>
-        </nav>
-      </div>
-      <div className="Channel">
-        <div className="ChannelMain">
-          <div className="ChannelInfo">
-            <div className="Topic">
-              Topic: <input className="TopicInput" value="Awesome stuff" />
-            </div>
-            <div className="ChannelName">#general</div>
-          </div>
-          <div className="Messages">
-            <div className="EndOfMessages">That's every message!</div>
-            <div>
-              <div className="Day">
-                <div className="DayLine" />
-                <div className="DayText">{new Date().getFullYear()}</div>
-                <div className="DayLine" />
-              </div>
-              <div className="Message with-avatar">
-                <div className="Avatar" />
-                <div className="Author">
-                  <div>
-                    <span className="UserName">Ryan Florence </span>
-                    <span className="TimeStamp">3:37 PM</span>
-                  </div>
-                  <div className="MessageContent">Alright, lets do this.</div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="Message no-avatar">
-                <div className="MessageContent">works now?</div>
-              </div>
-            </div>
-          </div>
-          <div className="ChatInputBox">
-            <input className="ChatInput" placeholder="Message #general" />
-          </div>
-        </div>
-        <div className="Members">
-          <div>
-            <div className="Member">
-              <div className="MemberStatus offline" />
-              Ryan Florence
-            </div>
-            <div className="Member">
-              <div className="MemberStatus online" />
-              cleverbot
-            </div>
-          </div>
-        </div>
-      </div>
+      </Router>
     </div>
+  ) : (
+    <Login />
   );
 };
 
