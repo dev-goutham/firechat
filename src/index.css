@@ -67,10 +67,6 @@ body {
   background: hsl(30, 50%, 50%);
 }
 
-.ChannelName {
-  color: hsl(30, 50%, 50%);
-}
-
 .Channel {
   flex: 1;
   display: flex;
@@ -144,7 +140,7 @@ body {
   background-size: cover;
   background-position: center center;
   background-color: #fefefe;
-  /* background-image: url(https://placekitten.com/64/64); */
+  background-image: url(https://placekitten.com/64/64);
 }
 
 .Author {
@@ -162,7 +158,6 @@ body {
 }
 
 .MessageContent {
-  display: block;
 }
 
 .Message.no-avatar {
