@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DocumentReference, Timestamp } from "@firebase/firestore-types";
 import { format } from "date-fns";
+import { useLocalStorage } from "../../../hooks/useLocalSorage";
 
 interface Props {
   message: string;
@@ -21,28 +22,16 @@ export const MessageWithAvatar: React.FC<Props> = ({
   showDay,
   created_at,
 }) => {
-  const [user, setUser] = useState<IUser | null>(null);
+  const getUser = React.useCallback(async () => {
+    const res = (await userRef.get()).data() as {
+      username: string;
+      photoURL: string;
+    };
 
-  const fetchUsers = React.useCallback(async () => {
-    const userId = userRef.id;
-
-    const userFromStorage = window.localStorage.getItem(userId);
-    if (!userFromStorage) {
-      const res = (await userRef.get()).data() as {
-        username: string;
-        photoURL: string;
-      };
-      setUser({ ...res, id: userId });
-      window.localStorage.setItem(userId, JSON.stringify(res));
-    } else {
-      const parsedUser = JSON.parse(userFromStorage) as IUser;
-      setUser(parsedUser);
-    }
+    return { ...res, id: userRef.id };
   }, [userRef]);
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+  const user = useLocalStorage<IUser>(userRef.id, getUser);
 
   return (
     <>
