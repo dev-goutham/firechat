@@ -22,10 +22,7 @@ export const ChannelInfo: React.FC = () => {
     <div className="ChannelInfo">
       <div className="Topic">
         Topic:{" "}
-        <input
-          className="TopicInput"
-          value={channel ? channel.topic : "Unknown"}
-        />
+        <div className="TopicInput">{channel ? channel.topic : "Unknown"}</div>
       </div>
       <div className="ChannelName">#{id}</div>
     </div>
